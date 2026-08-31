@@ -19,7 +19,7 @@ export async function cargarListas(): Promise<ListaEmpaque[]>{
     }catch (error){
         return [];
         console.warn("No se pudieron cargar las listas", error);
-        
+    
     }
 }
 
