@@ -1,12 +1,12 @@
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation, useFocusEffect, CompositeNavigationProp } from "@react-navigation/native";
+import { useNavigation, CompositeNavigationProp } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import React, {useCallback, useState} from "react";
+import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import ListCard from "../components/ListCard";
 import { colors } from "../constants/colors";
-import { MainTabParamList, RootStackParamList, ListaEmpaque } from "../constants";
-import { cargarListas } from "../constants/storage";
+import { MainTabParamList, RootStackParamList } from "../constants";
+import { useAppSelector } from "../store/hooks";
 
 
 
@@ -16,17 +16,9 @@ type Navigation = CompositeNavigationProp<
 >;
 
 export default function HomeScreen() {
-  const navigation = useNavigation<Navigation>();
-  const [listas, setListas] = useState<ListaEmpaque[]>([]);
-
-  useFocusEffect(
-    useCallback(() => {
-      let activo = true;
-      cargarListas().then((datos) => {
-        if (activo) setListas(datos.sort((a, b) => b.creadaEn - a.creadaEn));
-      });
-      return () => { activo = false; };
-    }, [])
+  const navigation = useNavigation<any>();
+  const listas = useAppSelector ((state) =>
+    [... state.listas.items].sort ((a,b) => b.creadaEn -a.creadaEn)
   );
 
    return (
@@ -36,7 +28,8 @@ export default function HomeScreen() {
       {listas.length === 0 ? (
         <View style={styles.vacio}>
           <Text style={styles.vacioTitulo}>Aún no tienes listas</Text>
-          <Text style={styles.vacioTexto}>Ve a "Nueva lista" para crear tu primera lista de objetos a llevar.</Text>
+          <Text style={styles.vacioTexto}>
+            Ve a "Nueva lista" para crear tu primera lista de objetos a llevar.</Text>
         </View>
       ) : (
         <FlatList
