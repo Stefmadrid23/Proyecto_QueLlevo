@@ -1,14 +1,31 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Store } from '@reduxjs/toolkit';
+import { useAppDispatch } from './src/store/hooks';
+import { cargarListasDesdeStorage } from './src/store/slices/listaSlice';
 import RootNavigator from './src/navigation/RootNavigator';
+import { store } from './src/store/store';
+
+function InicioApp (){
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(cargarListasDesdeStorage());
+  }, [dispatch]);
+
+  return <RootNavigator />;
+}
 
 export default function App() {
   return (
+    <Provider store={store}>
     <SafeAreaProvider>
       <StatusBar style= "dark" />
-      <RootNavigator />
+      <InicioApp />
     </SafeAreaProvider>
+    </Provider>
   );
 }
 
