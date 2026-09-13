@@ -1,61 +1,28 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import ItemRow from "../components/ItemRow";
 import { colors } from "../constants/colors";
-import { ListaEmpaque, RootStackParamList } from "../constants";
-import { cargarListas, guardarListas } from "../constants/storage";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { alternarItem, eliminarItem, eliminarLista } from "../store/slices/listaSlice";
 
-type Props = NativeStackScreenProps<RootStackParamList, "DetalleLista">;
 
-export default function ListDetailScreen({ route, navigation }: Props) {
+export default function ListDetailScreen({ route, navigation }: any) {
   const { listaId } = route.params;
-  const [lista, setLista] = useState<ListaEmpaque | null>(null);
-  const [todasLasListas, setTodasLasListas] = useState<ListaEmpaque[]>([]);
+  const dispatch = useAppDispatch();
+  const lista = useAppSelector((state) =>
+    state.listas.items.find((l) => l.id === listaId)
+  );
 
-  useEffect(() => {
-    cargarListas().then((datos) => {
-      setTodasLasListas(datos);
-      const encontrada = datos.find((l) => l.id === listaId) ?? null;
-      setLista(encontrada);
-      navigation.setOptions({ title: encontrada?.titulo ?? "Lista" });
-    });
-  }, [listaId]);
-
-  async function actualizarLista(listaActualizada: ListaEmpaque) {
-    setLista(listaActualizada);
-    const nuevas = todasLasListas.map((l) => (l.id === listaActualizada.id ? listaActualizada : l));
-    setTodasLasListas(nuevas);
-    await guardarListas(nuevas);
-  }
-
-  function alternarItem(id: string) {
-    if (!lista) return;
-    actualizarLista({ ...lista, items: lista.items.map((i) => (i.id === id ? { ...i, empacado: !i.empacado } : i)) });
-  }
-
-  function eliminarItem(id: string) {
-    if (!lista) return;
-    actualizarLista({ ...lista, items: lista.items.filter((i) => i.id !== id) });
-  }
-
-  async function eliminarLista() {
-    const nuevas = todasLasListas.filter((l) => l.id !== listaId);
-    await guardarListas(nuevas);
-    navigation.goBack();
-  }
-
-  if (!lista) {
+  if (!lista){
     return (
       <View style={styles.centrado}>
-        <Text style={styles.textoVacio}>Cargando lista...</Text>
+        <Text style={styles.textoVacio}>Esta lista ya no existe.</Text>
       </View>
     );
   }
-
-  const total = lista.items.length;
-  const empacados = lista.items.filter((i) => i.empacado).length;
+const total = lista.items.length;
+const empacados = lista.items.filter((i) => i.empacado).length;
 
   return (
     <View style={styles.contenedor}>
@@ -70,11 +37,23 @@ export default function ListDetailScreen({ route, navigation }: Props) {
         data={lista.items}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listaItems}
-        renderItem={({ item }) => <ItemRow item={item} onAlternar={alternarItem} onEliminar={eliminarItem} />}
+        renderItem={({ item }) => (
+          <ItemRow
+             item={item}
+            onAlternar={(itemId) => dispatch(alternarItem({ listaId, itemId }))}
+            onEliminar={(itemId) => dispatch(eliminarItem({ listaId, itemId }))}  />
+        )}
         ListEmptyComponent={<Text style={styles.textoVacio}>Esta lista no tiene objetos todavía.</Text>}
       />
 
-      <CustomButton titulo="Eliminar lista" variante="peligro" onPress={eliminarLista} />
+      <CustomButton
+      titulo="Eliminar lista"
+      variante="peligro"
+      onPress={() => {
+        dispatch(eliminarLista(listaId));
+        navigation.goBack();
+      }}
+      />
     </View>
   );
 }
