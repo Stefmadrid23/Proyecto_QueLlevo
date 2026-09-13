@@ -1,30 +1,32 @@
-import { CompositeNavigationProp, useNavigation } from "@react-navigation/native";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import { colors } from "../constants/colors";
-import { MainTabParamList, RootStackParamList } from "../constants";
+import { cerrarSesion } from "../store/slices/userSlice";
 
-type Navigation = CompositeNavigationProp<
-  BottomTabNavigationProp<MainTabParamList, "Inicio">,   
-  NativeStackNavigationProp<RootStackParamList>
->;
 
 export default function ProfileScreen() {
-  const navigation = useNavigation<Navigation>();
+  const navigation = useNavigation<any>();
+  const dispatch = useAppDispatch();
+  const usuario = useAppSelector((state) => state.usuario.datos);
 
   return (
     <View style={styles.contenedor}>
       <Image source={require("../../assets/maleta.png")} style={styles.avatar} />
-      <Text style={styles.titulo}>Mi perfil</Text>
-      <Text style={styles.texto}>Administra tus datos y cierra sesión desde aquí.</Text>
+      <Text style={styles.titulo}>{usuario?.nombre ?? "Mi perfil"}</Text>
+      <Text style={styles.texto}>{usuario?.email}</Text>
+      <Text style={styles.texto}>{usuario?.telefono}</Text>
+      
 
       <CustomButton
         titulo="Cerrar sesión"
         variante="secundario"
-        onPress={() => navigation.getParent<NativeStackNavigationProp<RootStackParamList>>()?.replace?.("Login")}
+        onPress={() => {
+          dispatch(cerrarSesion());
+          navigation.getParent()?.replace?.("Login")
+        }}
         estilo={{ marginTop: 24, width: "100%" }}
       />
     </View>
