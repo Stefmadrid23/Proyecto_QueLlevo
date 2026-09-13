@@ -4,8 +4,10 @@ import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, Vi
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
 import { colors } from "../constants/colors";
-import { RootStackParamList } from "../constants";
-import { validarEmail, validarPassword, validaTelefono, validarTexto } from "../constants/validation";
+import { RootStackParamList} from "../constants";
+import { useAppDispatch } from "../store/hooks";
+import { iniciarSesion } from "../store/slices/userSlice";
+import { validarEmail, validarPassword, validarTexto, validarTelefono } from "../constants/validation";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
 
@@ -17,6 +19,7 @@ interface Errores {
 }
 
 export default function LoginScreen({ navigation }: Props) {
+  const dispatch = useAppDispatch();
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -28,7 +31,7 @@ export default function LoginScreen({ navigation }: Props) {
     const nuevosErrores: Errores = {
       nombre: validarTexto(nombre),
       email: validarEmail(email),
-      telefono: validaTelefono(telefono),
+      telefono: validarTelefono(telefono),
       password: validarPassword(password),
     };
     setErrores(nuevosErrores);
@@ -39,6 +42,7 @@ export default function LoginScreen({ navigation }: Props) {
     if (!ValidarFormulario()) return;
     setCargando(true);
     setTimeout(() => {
+      dispatch(iniciarSesion({ nombre, email, telefono }));
       setCargando(false);
       navigation.replace("Main");
     }, 600);
