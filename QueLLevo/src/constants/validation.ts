@@ -16,7 +16,7 @@ export function validarEmail(valor:string): string | null {
     return null;
 }
 
-export function validaTelefono(valor: string): string | null {
+export function validarTelefono(valor: string): string | null {
     const requerido= validarRequerido(valor);
     if(requerido) return requerido;
 
