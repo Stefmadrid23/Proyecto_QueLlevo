@@ -6,7 +6,8 @@ import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
 import { colors, listColors } from "../constants/colors";
 import { MainTabParamList, ListaEmpaque, ItemLista } from "../constants";
-import { cargarListas, guardarListas } from "../constants/storage";
+import { useAppDispatch } from "../store/hooks";
+import { agregarLista } from "../store/slices/listaSlice";
 import { validarRequerido, validarTexto } from "../constants/validation";
 
 type Navigation = BottomTabNavigationProp<MainTabParamList, "NuevaLista">;
@@ -61,8 +62,7 @@ export default function NewListScreen() {
       creadaEn: Date.now(),
     };
 
-    const listasActuales = await cargarListas();
-    await guardarListas([...listasActuales, nuevaLista]);
+    dispatch(agregarLista(nuevaLista));
 
     setTitulo("");
     setActividad("");
@@ -138,3 +138,7 @@ const styles = StyleSheet.create({
   itemPreviewTexto: { color: colors.text, fontSize: 14 },
   itemQuitar: { color: colors.danger, fontSize: 12, fontWeight: "600" },
 });
+
+function dispatch(arg0: { payload: ListaEmpaque; type: "listas/agregarLista"; }) {
+  throw new Error("Function not implemented.");
+}
