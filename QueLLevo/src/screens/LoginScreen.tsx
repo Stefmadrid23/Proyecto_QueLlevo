@@ -3,10 +3,10 @@ import React, { useState } from "react";
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
-import { colors } from "../constants/colors";
 import { RootStackParamList} from "../constants";
 import { useAppDispatch } from "../store/hooks";
 import { iniciarSesion } from "../store/slices/userSlice";
+import { useTema } from "../store/useTema";
 import { validarEmail, validarPassword, validarTexto, validarTelefono } from "../constants/validation";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Login">;
@@ -20,6 +20,9 @@ interface Errores {
 
 export default function LoginScreen({ navigation }: Props) {
   const dispatch = useAppDispatch();
+  const {colores } = useTema();
+  const styles = getStyles (colores);
+
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -67,11 +70,13 @@ export default function LoginScreen({ navigation }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  contenedor: { flex: 1, backgroundColor: colors.background },
+function getStyles(colores: ReturnType<typeof useTema>["colores"]){
+  return StyleSheet.create({
+  contenedor: { flex: 1, backgroundColor: colores.background },
   scroll: { flexGrow: 1, justifyContent: "center", alignItems: "center", padding: 24 },
   logo: { width: 84, height: 84, marginBottom: 16 },
-  titulo: { fontSize: 26, fontWeight: "800", color: colors.text },
-  subtitulo: { fontSize: 14, color: colors.textMuted, textAlign: "center", marginTop: 6, marginBottom: 24 },
+  titulo: { fontSize: 26, fontWeight: "800", color: colores.text },
+  subtitulo: { fontSize: 14, color: colores.textMuted, textAlign: "center", marginTop: 6, marginBottom: 24 },
   formulario: { width: "100%" },
 });
+}
