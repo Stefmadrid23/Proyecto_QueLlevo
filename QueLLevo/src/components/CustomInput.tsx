@@ -1,6 +1,6 @@
 import React from "react";
 import { KeyboardTypeOptions, StyleSheet, Text, TextInput, View } from "react-native";
-import { colors } from "../constants/colors";
+import { useTema } from "../store/useTema";
 
 
 interface CustomInputProps{
@@ -24,6 +24,8 @@ export default function CustomInput ({
     tipoTeclado = "default",
     autoCapitalizar = "sentences",
 }: CustomInputProps) {
+    const {colores} = useTema();
+    const styles = getStyles(colores);
     const tieneError = !!error;
 
     return(
@@ -34,7 +36,7 @@ export default function CustomInput ({
             value={valor}
             onChangeText={onCambio}
             placeholder={placeholder}
-            placeholderTextColor={colors.textMuted}
+            placeholderTextColor={colores.textMuted}
             secureTextEntry={esPassword}
             keyboardType={tipoTeclado}
             autoCapitalize={autoCapitalizar}
@@ -45,20 +47,22 @@ export default function CustomInput ({
     
 }
 
-const styles= StyleSheet.create({
+function getStyles(colores: ReturnType<typeof useTema> ["colores"]){
+     return StyleSheet.create({
     contenedor: { marginBottom: 16, width: "100%" },
-  etiqueta: { fontSize: 14, fontWeight: "600", color: colors.text, marginBottom: 6 },
+  etiqueta: { fontSize: 14, fontWeight: "600", color: colores.text, marginBottom: 6 },
   input: {
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colores.border,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
-    backgroundColor: colors.card,
-    color: colors.text,
+    backgroundColor: colores.card,
+    color: colores.text,
   },
-  inputError: { borderColor: colors.danger },
-  textoError: { color: colors.danger, fontSize: 12, marginTop: 4 },
+  inputError: { borderColor: colores.danger },
+  textoError: { color: colores.danger, fontSize: 12, marginTop: 4 },
 
 });
+}
