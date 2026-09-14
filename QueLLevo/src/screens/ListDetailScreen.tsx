@@ -2,7 +2,7 @@ import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import ItemRow from "../components/ItemRow";
-import { colors } from "../constants/colors";
+import { useTema } from "../store/useTema";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { alternarItem, eliminarItem, eliminarLista } from "../store/slices/listaSlice";
 
@@ -10,6 +10,8 @@ import { alternarItem, eliminarItem, eliminarLista } from "../store/slices/lista
 export default function ListDetailScreen({ route, navigation }: any) {
   const { listaId } = route.params;
   const dispatch = useAppDispatch();
+  const { colores} = useTema();
+  const styles = getStyles(colores);
   const lista = useAppSelector((state) =>
     state.listas.items.find((l) => l.id === listaId)
   );
@@ -58,12 +60,14 @@ const empacados = lista.items.filter((i) => i.empacado).length;
   );
 }
 
-const styles = StyleSheet.create({
-  contenedor: { flex: 1, backgroundColor: colors.background, padding: 20 },
-  centrado: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colors.background },
-  encabezado: { backgroundColor: colors.card, borderRadius: 12, padding: 16, marginBottom: 16, borderLeftWidth: 5 },
-  actividad: { fontSize: 18, fontWeight: "700", color: colors.text },
-  progreso: { fontSize: 13, color: colors.textMuted, marginTop: 4 },
+function getStyles(colores:ReturnType<typeof useTema>["colores"]){
+ return  StyleSheet.create({
+  contenedor: { flex: 1, backgroundColor: colores.background, padding: 20 },
+  centrado: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: colores.background },
+  encabezado: { backgroundColor: colores.card, borderRadius: 12, padding: 16, marginBottom: 16, borderLeftWidth: 5 },
+  actividad: { fontSize: 18, fontWeight: "700", color: colores.text },
+  progreso: { fontSize: 13, color: colores.textMuted, marginTop: 4 },
   listaItems: { flexGrow: 1, paddingBottom: 16 },
-  textoVacio: { textAlign: "center", color: colors.textMuted, marginTop: 24 },
+  textoVacio: { textAlign: "center", color: colores.textMuted, marginTop: 24 },
 });
+}
