@@ -12,6 +12,7 @@ interface ListaCardProps {
 export default function ListCard({ lista, onPress }: ListaCardProps) {
   const { colores } = useTema();
   const styles = getStyles(colores);
+
   const total = lista.items.length;
   const empacados = lista.items.filter((i) => i.empacado).length;
   const completa = total > 0 && empacados === total;
@@ -35,7 +36,7 @@ function getStyles(colores: ReturnType<typeof useTema>["colores"]){
   return StyleSheet.create({
   card: {
     flexDirection: "row",
-    backgroundColor: colors.card,
+    backgroundColor: colores.card,
     borderRadius: 14,
     marginBottom: 12,
     overflow: "hidden",
