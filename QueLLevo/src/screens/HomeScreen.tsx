@@ -3,6 +3,7 @@ import { useNavigation, CompositeNavigationProp } from "@react-navigation/native
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import ListCard from "../components/ListCard";
 import { MainTabParamList, RootStackParamList } from "../constants";
 import { useAppSelector } from "../store/hooks";
@@ -16,7 +17,7 @@ type Navigation = CompositeNavigationProp<
 >;
 
 export default function HomeScreen() {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<Navigation>();
   const { colores} = useTema();
   const styles = getStyles(colores);
   const listas = useAppSelector ((state) =>
@@ -24,7 +25,7 @@ export default function HomeScreen() {
   );
 
    return (
-    <View style={styles.contenedor}>
+    <SafeAreaView style={styles.contenedor} edges={["top"]}>
       <Text style={styles.encabezado}>Tus listas</Text>
 
       {listas.length === 0 ? (
@@ -43,7 +44,7 @@ export default function HomeScreen() {
           )}
         />
       )}
-    </View>
+    </SafeAreaView>
   );
 }
 function getStyles(colores: ReturnType<typeof useTema>["colores"]){
