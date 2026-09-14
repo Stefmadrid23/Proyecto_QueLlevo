@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from "react-native";
-import { colors } from "../constants/colors"
+import { useTema } from "../store/useTema";
 
 interface CustomButtonProps {
     titulo: string;
@@ -25,6 +25,8 @@ export default function CustomButton({
     deshabilitado = false,
     estilo, 
 }: CustomButtonProps){
+    const {colores } = useTema();
+    const styles = getStyles(colores);
     const estaDeshabilitado = deshabilitado || cargando;
 
     return (
@@ -42,7 +44,7 @@ export default function CustomButton({
         activeOpacity={0.8}
         >
             {cargando?(
-                <ActivityIndicator color={variante === "secundario" ? colors.primary: "#fff"}/>
+                <ActivityIndicator color={variante === "secundario" ? colores.primary: "#fff"}/>
             ):(
                 <Text style={[styles.texto, variante === "secundario" && styles.textoSecundario]}>
                     {titulo}
@@ -52,8 +54,8 @@ export default function CustomButton({
         </TouchableOpacity>
     );
 }
-
-const styles= StyleSheet.create({
+function getStyles(colores: ReturnType<typeof useTema>["colores"]){
+   return StyleSheet.create({
     base: {
         flexDirection: "row",
         justifyContent: "center",
@@ -63,10 +65,11 @@ const styles= StyleSheet.create({
         borderRadius: 12,
         minHeight: 50,
     },
-    primario: {backgroundColor: colors.primary},
-    secundario: {backgroundColor: "transparent", borderWidth: 1.5, borderColor: colors.primary},
-    peligro: {backgroundColor: colors.danger},
+    primario: {backgroundColor: colores.primary},
+    secundario: {backgroundColor: "transparent", borderWidth: 1.5, borderColor: colores.primary},
+    peligro: {backgroundColor: colores.danger},
     deshabilitado: {opacity: 0.5},
     texto: { color: "#fff", fontSize: 16, fontWeight: "600"},
-    textoSecundario: {color: colors.primary},
+    textoSecundario: {color: colores.primary},
 });
+}
