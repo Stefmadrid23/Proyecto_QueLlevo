@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { colors } from "../constants/colors";
 import { ListaEmpaque } from "../constants";
+import { useTema } from "../store/useTema";
 
 interface ListaCardProps {
   lista: ListaEmpaque;
@@ -9,6 +10,8 @@ interface ListaCardProps {
 }
 
 export default function ListCard({ lista, onPress }: ListaCardProps) {
+  const { colores } = useTema();
+  const styles = getStyles(colores);
   const total = lista.items.length;
   const empacados = lista.items.filter((i) => i.empacado).length;
   const completa = total > 0 && empacados === total;
@@ -28,7 +31,8 @@ export default function ListCard({ lista, onPress }: ListaCardProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function getStyles(colores: ReturnType<typeof useTema>["colores"]){
+  return StyleSheet.create({
   card: {
     flexDirection: "row",
     backgroundColor: colors.card,
@@ -43,7 +47,7 @@ const styles = StyleSheet.create({
   },
   barraColor: { width: 6 },
   contenido: { flex: 1, padding: 14 },
-  titulo: { fontSize: 16, fontWeight: "700", color: colors.text },
+  titulo: { fontSize: 16, fontWeight: "700", color: colores.text },
   actividad: { fontSize: 13, color: colors.textMuted, marginTop: 2 },
   progreso: {
     fontSize: 13,
@@ -51,9 +55,10 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   progresoCompleto: {
-    color: colors.success,
+    color: colores.success,
   },
   progresoPendiente: {
-    color: colors.primary,
+    color: colores.primary,
   },
 });
+}
