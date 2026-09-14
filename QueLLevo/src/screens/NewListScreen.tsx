@@ -4,10 +4,11 @@ import React, {useState} from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
-import { colors, listColors } from "../constants/colors";
+import { listColors } from "../constants/colors";
 import { MainTabParamList, ListaEmpaque, ItemLista } from "../constants";
 import { useAppDispatch } from "../store/hooks";
 import { agregarLista } from "../store/slices/listaSlice";
+import { useTema } from "../store/useTema";
 import { validarRequerido, validarTexto } from "../constants/validation";
 
 type Navigation = BottomTabNavigationProp<MainTabParamList, "NuevaLista">;
@@ -20,6 +21,9 @@ const SUGERENCIAS: { actividad: string; items: string[] }[] = [
 
 export default function NewListScreen() {
   const navigation = useNavigation<Navigation>();
+  const dispatch = useAppDispatch();
+  const {colores} = useTema();
+  const styles = getStyles(colores);
 
   const [titulo, setTitulo] = useState("");
   const [actividad, setActividad] = useState("");
@@ -62,13 +66,23 @@ export default function NewListScreen() {
       creadaEn: Date.now(),
     };
 
-    dispatch(agregarLista(nuevaLista));
+    dispatch(
+      agregarLista({
+        id: `${Date.now()}`,
+        titulo: titulo.trim(),
+        actividad: actividad.trim(),
+        color: colorSeleccionado,
+        items,
+        creadaEn: Date.now(),
+      })
+    );
 
     setTitulo("");
     setActividad("");
     setItems([]);
     navigation.navigate("Inicio");
   }
+
 return (
     <ScrollView style={styles.contenedor} contentContainerStyle={styles.scroll}>
       <Text style={styles.encabezado}>Nueva lista</Text>
@@ -120,25 +134,24 @@ return (
   );
 }
 
-const styles = StyleSheet.create({
-  contenedor: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 20 },
+function getStyles(colores: ReturnType<typeof useTema>["colores"]){
+  return StyleSheet.create({
+  contenedor: { flex: 1, backgroundColor: colores.background, paddingHorizontal: 20 },
   scroll: { paddingTop: 16 },
-  encabezado: { fontSize: 24, fontWeight: "800", color: colors.text, marginBottom: 16 },
-  subEncabezado: { fontSize: 14, fontWeight: "700", color: colors.textMuted, marginBottom: 10, marginTop: 4 },
+  encabezado: { fontSize: 24, fontWeight: "800", color: colores.text, marginBottom: 16 },
+  subEncabezado: { fontSize: 14, fontWeight: "700", color: colores.textMuted, marginBottom: 10, marginTop: 4 },
   filaSugerencias: { flexDirection: "row", flexWrap: "wrap", marginBottom: 16 },
-  chip: { backgroundColor: colors.card, borderWidth: 1, borderColor: colors.border, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14, marginRight: 8, marginBottom: 8 },
-  chipTexto: { color: colors.primary, fontWeight: "600", fontSize: 13 },
+  chip: { backgroundColor: colores.card, borderWidth: 1, borderColor: colores.border, borderRadius: 20, paddingVertical: 8, paddingHorizontal: 14, marginRight: 8, marginBottom: 8 },
+  chipTexto: { color: colores.primary, fontWeight: "600", fontSize: 13 },
   filaColores: { flexDirection: "row", alignItems: "center", marginBottom: 20 },
   circuloColor: { width: 32, height: 32, borderRadius: 16, marginRight: 12, borderWidth: 2, borderColor: "transparent" },
-  circuloSeleccionado: { borderColor: colors.text },
+  circuloSeleccionado: { borderColor: colores.text },
   filaAgregarItem: { flexDirection: "row", alignItems: "flex-start" },
-  botonAgregar: { backgroundColor: colors.primary, width: 48, height: 48, borderRadius: 10, justifyContent: "center", alignItems: "center", marginLeft: 10, marginTop: 2 },
+  botonAgregar: { backgroundColor: colores.primary, width: 48, height: 48, borderRadius: 10, justifyContent: "center", alignItems: "center", marginLeft: 10, marginTop: 2 },
   botonAgregarTexto: { color: "#fff", fontSize: 22, fontWeight: "700" },
-  itemPreview: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: colors.border },
-  itemPreviewTexto: { color: colors.text, fontSize: 14 },
-  itemQuitar: { color: colors.danger, fontSize: 12, fontWeight: "600" },
+  itemPreview: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: colores.border },
+  itemPreviewTexto: { color: colores.text, fontSize: 14 },
+  itemQuitar: { color: colores.danger, fontSize: 12, fontWeight: "600" },
 });
 
-function dispatch(arg0: { payload: ListaEmpaque; type: "listas/agregarLista"; }) {
-  throw new Error("Function not implemented.");
 }
