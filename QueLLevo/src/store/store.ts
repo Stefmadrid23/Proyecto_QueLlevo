@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import usuarioReducer from "./slices/userSlice";
 import listasReducer from "./slices/listaSlice";
+import temaReducer from "./slices/temaSlice";
 
 export const store = configureStore({
   reducer: {
     usuario: usuarioReducer,
     listas: listasReducer,
+    tema: temaReducer,
   },
 });
 
