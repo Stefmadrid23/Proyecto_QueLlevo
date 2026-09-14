@@ -1,11 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import {Text} from "react-native";
-import { colors } from "../constants/colors";
 import HomeScreen from "../screens/HomeScreen";
 import NewListScreen from "../screens/NewListScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import { MainTabParamList } from "../constants";
+import { useTema } from "../store/useTema";
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -16,13 +16,23 @@ const ICONOS: Record<keyof MainTabParamList, string> = {
 };
 
 export default function TabNavigator() {
+     const {colores} = useTema();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textMuted,
-        tabBarIcon: () => <Text style={{ fontSize: 18 }}>{ICONOS[route.name as keyof MainTabParamList]}</Text>,
+        tabBarActiveTintColor: colores.primary,
+        tabBarInactiveTintColor: colores.textMuted,
+        tabBarStyle:{
+          backgroundColor: colores.card,
+          borderTopColor: colores.border,
+        },
+        tabBarIcon: () => (
+        <Text style={{ fontSize: 18 }}>
+          {ICONOS[route.name as keyof MainTabParamList]}
+          </Text>
+        ),
       })}
     >
       <Tab.Screen name="Inicio" component={HomeScreen} />
