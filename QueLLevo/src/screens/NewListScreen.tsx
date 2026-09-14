@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import {BottomTabNavigationProp} from "@react-navigation/bottom-tabs";
 import React, {useState} from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../components/CustomButton";
 import CustomInput from "../components/CustomInput";
 import { listColors } from "../constants/colors";
@@ -84,6 +85,7 @@ export default function NewListScreen() {
   }
 
 return (
+  <SafeAreaView style={{ flex: 1, backgroundColor: colores.background }} edges={["top"]}>
     <ScrollView style={styles.contenedor} contentContainerStyle={styles.scroll}>
       <Text style={styles.encabezado}>Nueva lista</Text>
 
@@ -131,6 +133,7 @@ return (
 
       <CustomButton titulo="Guardar lista" onPress={guardarLista} estilo={{ marginTop: 24, marginBottom: 40 }} />
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
