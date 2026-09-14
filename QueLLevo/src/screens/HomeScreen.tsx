@@ -4,9 +4,9 @@ import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import ListCard from "../components/ListCard";
-import { colors } from "../constants/colors";
 import { MainTabParamList, RootStackParamList } from "../constants";
 import { useAppSelector } from "../store/hooks";
+import { useTema } from "../store/useTema";
 
 
 
@@ -17,6 +17,8 @@ type Navigation = CompositeNavigationProp<
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
+  const { colores} = useTema();
+  const styles = getStyles(colores);
   const listas = useAppSelector ((state) =>
     [... state.listas.items].sort ((a,b) => b.creadaEn -a.creadaEn)
   );
@@ -44,11 +46,13 @@ export default function HomeScreen() {
     </View>
   );
 }
-const styles = StyleSheet.create({
-  contenedor: { flex: 1, backgroundColor: colors.background, paddingHorizontal: 20, paddingTop: 16 },
-  encabezado: { fontSize: 24, fontWeight: "800", color: colors.text, marginBottom: 16 },
+function getStyles(colores: ReturnType<typeof useTema>["colores"]){
+ return StyleSheet.create({
+  contenedor: { flex: 1, backgroundColor: colores.background, paddingHorizontal: 20, paddingTop: 16 },
+  encabezado: { fontSize: 24, fontWeight: "800", color: colores.text, marginBottom: 16 },
   lista: { paddingBottom: 24 },
   vacio: { flex: 1, justifyContent: "center", alignItems: "center", paddingHorizontal: 24 },
-  vacioTitulo: { fontSize: 17, fontWeight: "700", color: colors.text, marginBottom: 6 },
-  vacioTexto: { fontSize: 14, color: colors.textMuted, textAlign: "center" },
+  vacioTitulo: { fontSize: 17, fontWeight: "700", color: colores.text, marginBottom: 6 },
+  vacioTexto: { fontSize: 14, color: colores.textMuted, textAlign: "center" },
 });
+}
