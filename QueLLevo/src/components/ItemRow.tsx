@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { colors } from "../constants/colors";
 import { ItemLista } from "../constants";
+import { useTema } from "../store/useTema";
 
 interface ItemRowProps {
     item: ItemLista;
@@ -10,6 +10,9 @@ interface ItemRowProps {
 }
 
 export default function ItemRow({item, onAlternar, onEliminar}: ItemRowProps){
+  const { colores } = useTema();
+  const styles =getStyles (colores);
+
     return(
          <View style={styles.fila}>
       <TouchableOpacity style={styles.contenidoIzquierdo} onPress={() => onAlternar(item.id)} activeOpacity={0.6}>
@@ -26,7 +29,8 @@ export default function ItemRow({item, onAlternar, onEliminar}: ItemRowProps){
     );
 }
 
-const styles= StyleSheet.create({
+function getStyles(colores: ReturnType<typeof useTema> ["colores"]){
+   return StyleSheet.create({
     fila:{
         flexDirection: "row",
         justifyContent: "space-between",
@@ -34,7 +38,7 @@ const styles= StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 4,
         borderBottomWidth: 1,
-        borderBottomColor: colors.border,
+        borderBottomColor: colores.border,
     },
     contenidoIzquierdo: {flexDirection: "row", alignItems: "center", flex:1},
     checkbox:{
@@ -42,14 +46,15 @@ const styles= StyleSheet.create({
         height:24,
         borderRadius: 6,
         borderWidth: 2,
-        borderColor: colors.primary,
+        borderColor: colores.primary,
         justifyContent: "center",
         alignItems: "center",
         marginRight: 12,
     },
-    checkboxMarcado: {backgroundColor: colors.success, borderColor: colors.success},
+    checkboxMarcado: {backgroundColor: colores.success, borderColor: colores.success},
     check: {color: "#fff", fontSize: 14, fontWeight: "bold"},
-    texto: { fontSize: 15, color: colors.text, flexShrink: 1},
-    textoTachado: {textDecorationLine: "line-through", color: colors.textMuted},
-    eliminar: {color: colors.danger, fontSize: 16, paddingHorizontal: 8},
+    texto: { fontSize: 15, color: colores.text, flexShrink: 1},
+    textoTachado: {textDecorationLine: "line-through", color: colores.textMuted},
+    eliminar: {color: colores.danger, fontSize: 16, paddingHorizontal: 8},
 });
+}
