@@ -8,6 +8,7 @@ import { cargarListasDesdeStorage } from './src/store/slices/listaSlice';
 import RootNavigator from './src/navigation/RootNavigator';
 import { store } from './src/store/store';
 import { cargarTemaDesdeStorage } from './src/store/slices/temaSlice';
+import { supabase } from './src/services/supabaseCliente';
 
 function InicioApp (){
   const dispatch = useAppDispatch();
