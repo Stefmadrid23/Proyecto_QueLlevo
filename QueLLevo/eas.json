@@ -5,7 +5,6 @@
 
   "build": {
     "preview": {
-      "appDir": ".",
       "developmentClient":false,
       "android": {
         "buildType": "apk"
@@ -22,6 +21,10 @@
     "preview4": {
       "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "android": {
+        "buildType": "app-bundle"
+      }
+    }
   }
 }
