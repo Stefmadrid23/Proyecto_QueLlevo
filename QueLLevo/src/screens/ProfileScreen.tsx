@@ -6,6 +6,7 @@ import CustomButton from "../components/CustomButton";
 import { cerrarSesion } from "../store/slices/userSlice";
 import { alternarTema } from "../store/slices/temaSlice";
 import { useTema } from "../store/useTema";
+import { cerrarSesionConSupabase } from "../store/slices/userSlice";
 
 
 export default function ProfileScreen() {
@@ -38,7 +39,7 @@ export default function ProfileScreen() {
         titulo="Cerrar sesión"
         variante="secundario"
         onPress={() => {
-          dispatch(cerrarSesion());
+          dispatch(cerrarSesionConSupabase());
           navigation.getParent()?.replace?.("Login")
         }}
         estilo={{ marginTop: 24, width: "100%" }}
