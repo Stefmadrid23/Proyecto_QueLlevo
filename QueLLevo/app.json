@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "QueLLevo",
-    "slug": "QueLLevo",
+    "name": "QueLlevo",
+    "slug": "QueLlevo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,7 +13,11 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "y",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,18 +26,20 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.stefmadrid23.QueLLevo"
+      "package": "com.stefmadrid23.QueLlevo"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-status-bar"
+      "expo-status-bar",
+      "expo-asset"
     ],
     "extra": {
       "eas": {
-        "projectId": "9572d994-31e6-4908-8932-53684cf5c48e"
+        "projectId": "c9b694ed-7c88-40a4-b193-cf4aa3805b33"
       }
-    }
+    },
+    "owner": "stefmadrid23"
   }
 }
